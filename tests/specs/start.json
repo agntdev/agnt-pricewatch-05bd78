@@ -12,5 +12,14 @@
         ]
       }
     ]
+  },
+  {
+    "name": "back to menu button re-renders the main menu",
+    "steps": [
+      {
+        "send": { "callback": "menu:main" },
+        "expect": [{ "method": "editMessageText" }]
+      }
+    ]
   }
 ]

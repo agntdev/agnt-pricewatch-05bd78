@@ -1,19 +1,15 @@
 [
   {
-    "name": "/owner",
+    "name": "/owner shows owner-only message when not owner",
     "steps": [
       {
+        "send": { "text": "/owner" },
         "expect": [
           {
             "method": "sendMessage",
-            "payload": {
-              "text": "Display aggregate usage statistics"
-            }
+            "payload": { "text": "This command is only available to the bot owner." }
           }
-        ],
-        "send": {
-          "text": "/owner"
-        }
+        ]
       }
     ]
   }
