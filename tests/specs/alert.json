@@ -1,0 +1,122 @@
+[
+  {
+    "name": "alert:menu with empty watchlist",
+    "steps": [
+      {
+        "send": { "callback": "alert:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "Add coins to your watchlist first, then set up price alerts." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "alert:menu with coins shows coin list",
+    "steps": [
+      {
+        "send": { "callback": "addc:BTC" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "alert:menu" },
+        "expect": [{ "method": "editMessageText", "payload": { "text": "Pick a coin to set an alert for:" } }]
+      }
+    ]
+  },
+  {
+    "name": "pick coin shows alert type options",
+    "steps": [
+      {
+        "send": { "callback": "addc:BTC" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "alert:pick:BTC" },
+        "expect": [{ "method": "editMessageText", "payload": { "text": "What kind of alert for BTC?" } }]
+      }
+    ]
+  },
+  {
+    "name": "selecting alert type asks for value",
+    "steps": [
+      {
+        "send": { "callback": "addc:BTC" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "alert:pick:BTC" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "alert:type:above" },
+        "expect": [{ "method": "editMessageText", "payload": { "text": "Enter the price above threshold (e.g. 50000):" } }]
+      }
+    ]
+  },
+  {
+    "name": "entering value shows confirmation",
+    "steps": [
+      {
+        "send": { "callback": "addc:ETH" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "alert:pick:ETH" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "alert:type:below" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "text": "3000" },
+        "expect": [{ "method": "sendMessage", "payload": { "text": "Confirm alert for ETH:\n\nPrice below $3,000" } }]
+      }
+    ]
+  },
+  {
+    "name": "confirming alert creates it",
+    "steps": [
+      {
+        "send": { "callback": "addc:BTC" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "alert:pick:BTC" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "alert:type:above" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "text": "50000" },
+        "expect": [{ "method": "sendMessage" }]
+      },
+      {
+        "send": { "callback": "alert:confirm:alert_test123" },
+        "expect": [{ "method": "editMessageText", "payload": { "text": "✅ Alert created: BTC above $50,000. You'll be notified when the condition is met." } }]
+      }
+    ]
+  },
+  {
+    "name": "cancel alert flow",
+    "steps": [
+      {
+        "send": { "callback": "addc:BTC" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "alert:pick:BTC" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "alert:cancel" },
+        "expect": [{ "method": "editMessageText", "payload": { "text": "Alert cancelled." } }]
+      }
+    ]
+  }
+]

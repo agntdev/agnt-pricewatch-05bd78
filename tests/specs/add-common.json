@@ -1,19 +1,28 @@
 [
   {
-    "name": "Common Coins",
+    "name": "Common Coins button shows popular coins list",
     "steps": [
       {
+        "send": { "callback": "add_common" },
         "expect": [
           {
-            "method": "sendMessage",
-            "payload": {
-              "text": "Quick-add popular tickers (BTC, ETH, etc)"
-            }
+            "method": "editMessageText",
+            "payload": { "text": "Quick-add popular coins to your watchlist:" }
           }
-        ],
-        "send": {
-          "callback": "add_common"
-        }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "picking BTC from common coins adds it",
+    "steps": [
+      {
+        "send": { "callback": "add_common" },
+        "expect": [{ "method": "editMessageText" }]
+      },
+      {
+        "send": { "callback": "addc:BTC" },
+        "expect": [{ "method": "editMessageText" }]
       }
     ]
   }

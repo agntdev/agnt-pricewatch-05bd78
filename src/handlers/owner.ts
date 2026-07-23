@@ -1,15 +1,49 @@
 import { Composer } from "grammy";
+import type { Ctx } from "../bot.js";
+import { inlineButton, inlineKeyboard } from "../toolkit/index.js";
 
-// SCAFFOLD — generated from the bot blueprint BEFORE the agent runs.
-// Keep a LIVE registration (.command / .callbackQuery / …) so this feature is
-// never an empty stub. Replace the reply body with real logic + copy; if you
-// change the user-facing text, update tests/specs to match EXACTLY.
-// Do NOT rewrite src/bot.ts — buildBot() already auto-loads this module.
+const OWNER_ID = Number(process.env.OWNER_ID ?? "0");
 
-const composer = new Composer();
+function isOwner(ctx: Ctx): boolean {
+  if (OWNER_ID && ctx.from?.id === OWNER_ID) return true;
+  return false;
+}
+
+const composer = new Composer<Ctx>();
 
 composer.command("owner", async (ctx) => {
-  await ctx.reply("Display aggregate usage statistics");
+  if (!isOwner(ctx)) {
+    await ctx.reply("This command is only available to the bot owner.");
+    return;
+  }
+  const alertCount = (ctx.session.alerts ?? []).length;
+  await ctx.reply(
+    `📊 Bot statistics\n\n` +
+      `Your alerts: ${alertCount}`,
+    {
+      reply_markup: inlineKeyboard([
+        [inlineButton("⬅️ Back to menu", "menu:main")],
+      ]),
+    },
+  );
+});
+
+composer.callbackQuery("owner:stats", async (ctx) => {
+  await ctx.answerCallbackQuery();
+  if (!isOwner(ctx)) {
+    await ctx.reply("This command is only available to the bot owner.");
+    return;
+  }
+  const alertCount = (ctx.session.alerts ?? []).length;
+  await ctx.editMessageText(
+    `📊 Bot statistics\n\n` +
+      `Your alerts: ${alertCount}`,
+    {
+      reply_markup: inlineKeyboard([
+        [inlineButton("⬅️ Back to menu", "menu:main")],
+      ]),
+    },
+  );
 });
 
 export default composer;

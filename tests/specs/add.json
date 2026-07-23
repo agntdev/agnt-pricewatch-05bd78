@@ -1,19 +1,42 @@
 [
   {
-    "name": "/add",
+    "name": "/add shows add options",
     "steps": [
       {
+        "send": { "text": "/add" },
         "expect": [
           {
             "method": "sendMessage",
-            "payload": {
-              "text": "Add new ticker to watchlist"
-            }
+            "payload": { "text": "How would you like to add a ticker?" }
           }
-        ],
-        "send": {
-          "text": "/add"
-        }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "add:start callback shows add options",
+    "steps": [
+      {
+        "send": { "callback": "add:start" },
+        "expect": [{ "method": "editMessageText" }]
+      }
+    ]
+  },
+  {
+    "name": "add:manual callback asks for ticker symbol",
+    "steps": [
+      {
+        "send": { "callback": "add:manual" },
+        "expect": [{ "method": "editMessageText" }]
+      }
+    ]
+  },
+  {
+    "name": "add:common callback shows popular coins",
+    "steps": [
+      {
+        "send": { "callback": "add:common" },
+        "expect": [{ "method": "editMessageText" }]
       }
     ]
   }
